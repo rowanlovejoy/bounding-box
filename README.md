@@ -1,30 +1,28 @@
 # Bounding Box: 3D First-Person Platformer Video Game
 
-![Bouding Box Gameplay Demo](https://media.giphy.com/media/be0mPMUo3Ghkcd9TH7/giphy.gif)
-
 ### By Rowan Lovejoy
+
+![Bouding Box Gameplay Demo](https://media.giphy.com/media/be0mPMUo3Ghkcd9TH7/giphy.gif)
 
 ## Video
 
 **Link to video demonstration of Bounding Box on YouTube:** https://youtu.be/BaaZ5Q5ExaA
 
-## Report
+## Building and Running
 
-## Opening the Visual Studio Solution
-
-To open the project's Visual Studio solution, open the 'bounding-box' directory and then open the 'BoundingBox.sln' file. **PLEASE NOTE:** Afer building the solution, copy the file 'assimp-vc142-mtd.dll' and the folders 'media' and 'shaders' from the project root into the output folder alongside the compiled Coursework2.exe file (if building in Debug mode with x64, this executable should by default be output to /x64/Debug). If this is done, the game will not launch after building and will display an error about the missing .dll file.
-
-### User Interaction and Launching
-
-Bounding Box is a 3D first-person platformer video game for Windows, created using C++, OpenGL 4.5 Core, GLFW, GLEW, GLM, Assimp, and stb_image.
-
-The player controls the game using a keyboard and mouse. The W, A, S, and D keys move the player character left, right, forwards, and backwards on a 2D plane. The space bar triggers a jump, launching the player character upwards. The mouse controls the player view, which determines the forward and backwards direction. Using these controls in combination, the player can navigate the game and complete its platforming challenges. At any time, the player may press the Escape key to instantly quit the game.
+Navigate to the 'bounding-box' directory and then open the 'BoundingBox.sln' file, ensure the solution platform is set to #x64, and then build the solution. Afer building the solution, copy the file 'assimp-vc142-mtd.dll' and the folders 'media' and 'shaders' from the project root into the output folder alongside the compiled BoundingBox.exe file (if building in Debug mode with x64, this executable should by default be output to /x64/Debug). If these files are not in the same directory as the BoundingBox.exe file, the game will not launch after building and will display an error about the missing .dll file.
 
 The player can launch the game by double left-clicking on its executable in the File Explorer, or right-clicking on it and selecting ‘Open’ from the Context Menu. Gameplay begins immediately upon running the executable, the mouse cursor being captured by the game window. 
 
 Ensure the folders 'media' and 'shaders' and the 'assimp-vc142-mtd.dll' file are in the same folder as the built 'BoundingBox.exe' file. These folders and file can be found in the 'bounding-box' The application will not launch otherwise.
 
-### Program Class and Function Layout
+### How to Play
+
+Bounding Box is a 3D first-person platformer video game for Windows, created using C++, OpenGL 4.5 Core, GLFW, GLEW, GLM, Assimp, and stb_image.
+
+The player controls the game using a keyboard and mouse. The W, A, S, and D keys move the player character left, right, forwards, and backwards on a 2D plane. The space bar triggers a jump, launching the player character upwards. The mouse controls the player view, which determines the forward and backwards direction. Using these controls in combination, the player can navigate the game and complete its platforming challenges. At any time, the player may press the Escape key to instantly quit the game.
+
+### Application Code Walkthrough
 
 The program’s main() function initialises the windowing system, GLFW, creating a window for OpenGL to render into and binding functions to receive input and screen resizing callbacks. The main game logic is contained within the Game class, which is instantiated with a global ‘gameInstance’ variable. The Game class defines the components of the core game loop – input, update, and display – but the actual loop that calls these functions resides in main. The game uses fixed time-step for input and update calls, limited to sixty updates per second. This was done as part of efforts to fix an issue where collision was being checked too rapidly, which affected the player character’s jumping ability. Rendering occurs as fast the player’s hardware allows.
 
@@ -44,7 +42,7 @@ The doCollisions() method is also responsible for determining if the player char
 
 Jumping is the most complex movement ability in the game, requiring multiple variables and if statements. Jumping is initiated by pressing the Space bar and will succeed if the player character is currently grounded and the jump key is not currently pressed. The player cannot send another jump command until they release the jump key. A jump is an action that persists over multiple frames. While jumping, a pulse of upward velocity – positive Y-axis – is added to the player each tick, becoming small each time. Combined with the constant downwards force gravity, this provides a smooth upward motion with believable loss of velocity nearing the top of the jump. The number of pulses, the starting velocity, the velocity decay rate, and the strength of gravity were repeatedly tuned to provide a realistic and satisfying “space jump” effect, fitting the game’s theme. This is perhaps the feature I’m most proud of.
 
-## What Makes This Project Unique and Starting Point
+## What Makes This Project Unique
 
 3D first-person platforms are somewhat uncommon in the modern gaming landscape. While first-person games due feature platforming – for example Doom (2016) and Doom Eternal – this is not primary focus. Bounding Box echoes the gameplay style and feel of games including Jumping Flash  – it’s primary inspiration in terms of gameplay and physics feel – and Metroid Prime, both which feature a heavy emphasis on complex platforming in 3D world from a first-person perspective. I wanted to create the feel of leaping high into the air in a low gravity environment, the first-person perspective intensifying the effect of leaping forwards and falling. Compare to Jumping Flash and Metroid Prime, I don’t feel I entirely succeeded in emulating the “powerful” feel of the jumps, but with further adjustment and improvement to the physics system, I feel I could get there.
 
