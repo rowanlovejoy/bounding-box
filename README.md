@@ -1,45 +1,18 @@
-# 2020-COMP3016-Coursework2
-
-## Bounding Box: 3D First-Person Platformer Video Game
+# Bounding Box: 3D First-Person Platformer Video Game
 
 ![Bouding Box Gameplay Demo](https://media.giphy.com/media/be0mPMUo3Ghkcd9TH7/giphy.gif)
 
-### Rowan Lovejoy (10573747)
-
---------------------------------------------------------------------------------------------------
-## Pitch
-
-### Description of Proposal
-
-The proposed project is to produce a simple 3D first-person platformer video game, inspired by the game Jumping Flash! (Exact and Ultra, 1995). In the proposed game, the player’s objective is to control their avatar to jump between platforms in order to reach a goal point; if the player fails to land on a platform, they are sent back to the beginning of the game. As the player is falling, their shadow appears on platforms below them to indicate where they will land. The player views the game from a first-person perspective; there is no visible avatar model. The game features a moving player-controlled character in a 3D environment with textured models, and static environment lighting and a dynamic avatar shadow. Audio is not planned at this point. The intention is to create a short, fun gameplay experience with simple, colourful 3D graphics. The first-person perspective is intended to make platforming more challenging for players, and more exhilarating by enhancing their sense of speed and motion.
-
-### Libraries and Resources
-- Windowing and input library: GLFW (https://www.glfw.org/)
-- Extension management library: Epoxy (https://github.com/anholt/libepoxy)
-- GUI library: Dear ImGui (https://github.com/ocornut/imgui)
-- 3D Asset loading library: Assimp (https://assimp.org/index.php)
-- Maths library: GLM (https://glm.g-truc.net/0.9.9/index.html)
-- GLSL language integration Visual Studio extension (https://marketplace.visualstudio.com/items?itemName=DanielScherzer.GLSL)
-
-### User Interaction
-
-The user interacts with the game by controlling the movement and other actions of the game avatar, including its movement direction and distance, and when and how many times it jumps and in what direction. They also interact with a main menu in order to start playing the game after launching the game application and also to exit the application. Players input commands into the game using a keyboard and mouse.
-
-### References
-
-Exact and Ultra (1995) Jumping Flash! [Video Game]. Sony Computer Entertainment.
-
---------------------------------------------------------------------------------------------------
+### By Rowan Lovejoy
 
 ## Video
 
-**Link to video hosted on YouTube:** https://youtu.be/BaaZ5Q5ExaA
+**Link to video demonstration of Bounding Box on YouTube:** https://youtu.be/BaaZ5Q5ExaA
 
 ## Report
 
 ## Opening the Visual Studio Solution
 
-To open the project's Visual Studio solution, open the '2020-comp3016-cw2-rowanlovejoy' directory and then open the 'Coursework2.sln' file. **PLEASE NOTE:** Afer building the solution, copy the file 'assimp-vc142-mtd.dll' and the folders 'media' and 'shaders' from the project root into the output folder alongside the compiled Coursework2.exe file (if building in Debug mode with x64, this executable should by default be output to /x64/Debug). Failing to do this will result in the application failing to launch after building with an error about the missing .dll file.
+To open the project's Visual Studio solution, open the 'bounding-box' directory and then open the 'BoundingBox.sln' file. **PLEASE NOTE:** Afer building the solution, copy the file 'assimp-vc142-mtd.dll' and the folders 'media' and 'shaders' from the project root into the output folder alongside the compiled Coursework2.exe file (if building in Debug mode with x64, this executable should by default be output to /x64/Debug). If this is done, the game will not launch after building and will display an error about the missing .dll file.
 
 ### User Interaction and Launching
 
@@ -49,7 +22,7 @@ The player controls the game using a keyboard and mouse. The W, A, S, and D keys
 
 The player can launch the game by double left-clicking on its executable in the File Explorer, or right-clicking on it and selecting ‘Open’ from the Context Menu. Gameplay begins immediately upon running the executable, the mouse cursor being captured by the game window. 
 
-Ensure the folders 'media' and 'shaders' and the 'assimp-vc142-mtd.dll' file are in the same folder as the built 'Coursework2.exe' file. These folders and file can be found in the '2020-comp3016-cw2-rowanlovejoy' The application will not launch otherwise.
+Ensure the folders 'media' and 'shaders' and the 'assimp-vc142-mtd.dll' file are in the same folder as the built 'BoundingBox.exe' file. These folders and file can be found in the 'bounding-box' The application will not launch otherwise.
 
 ### Program Class and Function Layout
 
@@ -80,9 +53,3 @@ Development of the project had two starting points: the Coursework 2 project pro
 From there, I established the basic gameplay framework – the Game and GameObject classes – using tutorial from LearnOpenGL.com, adding the ability associate GameObjects and 3D models in the VisualObject class, incorporating the collision detection algorithm from the example 2D Breakout clone from LearnOpenGL.com and expanding it into 3D dimensions. Once collision detection was functional, I updated it again to support the jumping system, which was added shortly afterwards.
 
 Though much of the starting code was derived from online tutorials, my combination of it into a 3D game is original, incorporating information and examples from a variety of sources. The Game class and GameObject hierarchy were updated to enable polymorphic drawing and movement of objects by adding and consuming velocity. The jumping physics, the extension of the collision detection and resolution algorithm into 3D, and the sky cube are also original. Other original functionality includes the ability to scale and offset of the position of 3D models in the VisualObject class, which was necessary resolve mismatches between visible size and collision size. Throughout there also numerous small improvements to the code to improve clarity and maintainability and to make use of modern C++ programming practices where possible, such as consistent use of const and constexpr, type inference, pass by constant reference, and employing smart pointers to enable polymorphic behaviour with memory safety.
-
-### Changes to Software Used
-
-In the original brief, I stated I would use the Lib Expoxy library (link: https://github.com/anholt/libepoxy) for extension management. I chose this library after reading about its error reporting functionality to report issues, which I felt would ease development by helping me identify and diagnose issues sooner. However, I ran into difficulty setting it up, and decided that due to the starting Coursework 2 project already being configured to use GLEW, an alternative extension management library, I decided to drop Lib Epoxy and continue with GLEW instead. Given my understanding of OpenGL and skills at the time, and the time preasure, I believe this was a good choice to save myself the effort implementing something that was not entirely necessary. 
-
-Another change was not encorporating Dear ImGUI to provide a graphical user interface. This was left until late in development due to difficulty implementing other parts of the project such as collision detection, and by that point there was no time remaining. The lack of the GUI does not majorly affect the final product, as it has no gameplay features that require such as an interface. 
