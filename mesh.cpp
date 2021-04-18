@@ -1,5 +1,7 @@
 #include "mesh.h"
 
+#include <glm/matrix.hpp>
+
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices,
            const std::vector<Texture>& textures)
 {
@@ -42,8 +44,12 @@ void Mesh::draw(const Shader& shader, const glm::mat4& transform) const
 		
 		glBindTexture(GL_TEXTURE_2D, Textures[i].Id);
 	}
-
+	
 	shader.setUniform("model", transform);
+	
+	// Generate and set model matrix
+	const auto normalMatrix{glm::mat3{glm::transpose(glm::inverse(transform))}};
+	shader.setUniform("normalMat", normalMatrix);
 
 	// Render the mesh
 	glBindVertexArray(VAO);
