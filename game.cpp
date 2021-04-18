@@ -75,10 +75,13 @@ void Game::init()
 	Shaders[0].use();
 	Shaders[0].setUniform("projection", projection);
 
-	// Set directional light's -- i.e., the sun's -- position
+	// Set directional light direction
 	constexpr auto lightPos{glm::vec4{-0.75, -0.5, -0.3, 0.0}};
-	//constexpr auto lightPos{glm::vec4{10.0, 10.0, 0.0, 1.0}};
-	Shaders[0].setUniform("light.position", lightPos); 
+	Shaders[0].setUniform("light.position", lightPos);
+
+	// Set directional light color
+	constexpr auto lightColor{glm::vec3{1.0}};
+	Shaders[0].setUniform("light.color", lightColor); 
 }
 
 // Handle received keyboard input by triggering functionality in controllable GameObjects
@@ -104,6 +107,8 @@ void Game::update()
 {
 	// Consume inputted velocity and move the character
 	PlayerCharacter.move();
+	Shaders[0].use();
+	Shaders[0].setUniform("viewPos", PlayerCharacter.getPosition());
 	
 	// Vertically oscillate platforms
 	for (auto i{2}; i < GameObjects.size() - 1; ++i)
