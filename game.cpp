@@ -74,6 +74,11 @@ void Game::init()
 	const auto projection{glm::perspective(glm::radians(PlayerCharacter.getFov()), static_cast<float>(ScreenWidth) / static_cast<float>(ScreenHeight), 0.1f, 1000.0f)};
 	Shaders[0].use();
 	Shaders[0].setUniform("projection", projection);
+
+	// Set directional light's -- i.e., the sun's -- position
+	constexpr auto lightPos{glm::vec4{-0.75, -0.5, -0.3, 0.0}};
+	//constexpr auto lightPos{glm::vec4{10.0, 10.0, 0.0, 1.0}};
+	Shaders[0].setUniform("light.position", lightPos); 
 }
 
 // Handle received keyboard input by triggering functionality in controllable GameObjects

@@ -6,7 +6,7 @@ layout (location = 2) in vec2 aTexCoords;
 
 out vec2 TexCoords;
 out vec3 Normal;
-out vec3 FragPos;
+out vec4 FragPos;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -21,7 +21,7 @@ void main()
 	Normal = normalMat * aNormal;
 
 	// Convert fragment position to world space before passing it through
-	FragPos = vec3(model * vec4(aPos, 1.0));
+	FragPos = model * vec4(aPos, 1.0);
 
 	// Convert vertex position to uniform device coords
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
