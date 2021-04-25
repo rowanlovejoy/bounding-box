@@ -12,10 +12,11 @@ void Game::init()
 {
 	// Initialise shaders
 	Shaders.emplace_back(Shader{"shaders/shader.vert", "shaders/shader.frag"});
+	Shaders.emplace_back(Shader{"shaders/skybox.vert", "shaders/skybox.frag"});
 
 	// Initialise sky cube
-	const Model skycubeModel{"media/skycube/skycube.obj"};
-	GameObjects.emplace_back(new VisibleObject{glm::vec3{0.0f}, glm::vec3{0.0f}, skycubeModel, glm::vec3{20.0f}});
+	const Model skyboxModel{"media/skycube/skycube.obj"};
+	GameObjects.emplace_back(new VisibleObject{glm::vec3{0.0f}, glm::vec3{0.0f}, skyboxModel, Shaders[1], glm::vec3{20.0f}});
 	
 	// Initialise level objects
 	const Model platformModel{"media/platform/platform.obj"};
@@ -24,48 +25,57 @@ void Game::init()
 		glm::vec3{0.0f, 0.0f, 0.0f},
 		glm::vec3{4.0f, 1.0f, 4.0f},
 		platformModel,
+		Shaders[0],
 		glm::vec3{2.0f, 1.0f, 2.0f},
 		glm::vec3{1.0f, 0.0f, 1.0f}
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{0.0f, 0.0f, -5.5f},
 		platformSize,
-		platformModel
+		platformModel,
+		Shaders[0]
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{0.0f, 1.5f, -10.0f},
 		platformSize,
-		platformModel
+		platformModel,
+		Shaders[0]
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{6.5f, -1.0f, -10.0f},
 		platformSize,
-		platformModel
+		platformModel,
+		Shaders[0]
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{12.5f, -5.0f, -5.0f},
 		platformSize,
-		platformModel
+		platformModel,
+		Shaders[0]
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{17.5f, -4.0f, -5.0f},
 		platformSize,
-		platformModel
+		platformModel,
+		Shaders[0]
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{17.5f, -2.5f, -9.0f},
 		platformSize,
-		platformModel
+		platformModel,
+		Shaders[0]
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{22.0f, -1.0f, -8.5f},
 		platformSize,
-		platformModel
+		platformModel,
+		Shaders[0]
 	});
 	GameObjects.emplace_back(new VisibleObject{
 		glm::vec3{30.0f, -4.5f, -8.5f},
 		glm::vec3{5.0f, 1.0f, 5.0f},
 		platformModel,
+		Shaders[0],
 		glm::vec3{3.0f, 1.0f, 3.0f},
 		glm::vec3{1.75f, 0.0f, 1.75f}
 	});
@@ -74,13 +84,17 @@ void Game::init()
 	const auto projection{glm::perspective(glm::radians(PlayerCharacter.getFov()), static_cast<float>(ScreenWidth) / static_cast<float>(ScreenHeight), 0.1f, 1000.0f)};
 	Shaders[0].use();
 	Shaders[0].setUniform("projection", projection);
+	Shaders[1].use();
+	Shaders[1].setUniform("projection", projection);
 
 	// Set directional light direction
 	constexpr auto lightPos{glm::vec4{-0.75, -0.5, -0.3, 0.0}};
+	Shaders[0].use();
 	Shaders[0].setUniform("light.position", lightPos);
 
 	// Set directional light color
 	constexpr auto lightColor{glm::vec3{1.0}};
+	Shaders[0].use();
 	Shaders[0].setUniform("light.color", lightColor); 
 }
 
@@ -134,9 +148,11 @@ void Game::render()
 	const auto view{PlayerCharacter.getViewMatrix()};
 	Shaders[0].use();
 	Shaders[0].setUniform("view", view);
+	Shaders[1].use();
+	Shaders[1].setUniform("view", view);
 
 	for (const auto& obj : GameObjects)
-		obj->draw(Shaders[0]);
+		obj->draw();
 }
 
 // Check for and resolve collisions between the player character and game objects. Also set the grounded state of the player (used for jumping logic)

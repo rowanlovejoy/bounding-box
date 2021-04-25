@@ -88,7 +88,7 @@ void Character::processMouseMovement(float xOffset, float yOffset)
 // Calculate and return the view matrix based on the player character's current state
 glm::mat4 Character::getViewMatrix() const
 {
-	return glm::lookAt(Position, Position + Front, Up);
+	return glm::lookAt(position_, position_ + Front, Up);
 }
 
 // Update direction vectors for the camera view and player character movement

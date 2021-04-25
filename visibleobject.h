@@ -9,12 +9,13 @@
 class VisibleObject : public GameObject
 {
 public:
-	VisibleObject(const glm::vec3& pos, const glm::vec3& siz, const Model& mod, const glm::vec3& scale = glm::vec3{1.0f}, const glm::vec3& offset = glm::vec3{0.0f});
+	VisibleObject(const glm::vec3& position, const glm::vec3& size, Model model, Shader shader, const glm::vec3& scale = glm::vec3{1.0}, const glm::vec3& offset = glm::vec3{0.0});
 
-	virtual void draw(const Shader& shader) const override;
+	virtual void draw() const override;
 
 private:
-	Model ObjectModel;
-	glm::vec3 Scale;
-	glm::vec3 Offset;
+	Model model_;
+	glm::vec3 scale_;
+	glm::vec3 offset_;
+	Shader shader_;
 };

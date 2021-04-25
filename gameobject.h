@@ -8,37 +8,20 @@ class GameObject
 {
 public:
 	virtual ~GameObject() = default;
-	GameObject(const glm::vec3& pos, const glm::vec3& siz, const glm::vec3& vel = glm::vec3{0.0f});
-	virtual void draw(const Shader& shader) const;
+	GameObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3& velocity = glm::vec3{0.0});
+	
+	virtual void draw() const;
 	virtual void move();
 	
-	void setPosition(const glm::vec3& newPos)
-	{
-		Position = newPos;
-	}
+	void setPosition(const glm::vec3& newPos);
+	const glm::vec3& getPosition() const;
+	const glm::vec3& getSize() const;
 	
-	const glm::vec3& getPosition() const
-	{
-		return Position;
-	}
-
-	const glm::vec3& getSize() const
-	{
-		return Size;
-	}
-
-	void addVelocity(const glm::vec3& direction)
-	{
-		Velocity += direction;
-	}
-
-	const glm::vec3& getVelocity() const
-	{
-		return Velocity;
-	}
+	void addVelocity(const glm::vec3& direction);
+	const glm::vec3& getVelocity() const;
 
 protected:
-	glm::vec3 Position;
-	glm::vec3 Size;
-	glm::vec3 Velocity;
+	glm::vec3 position_;
+	glm::vec3 size_;
+	glm::vec3 velocity_;
 };

@@ -8,7 +8,6 @@ out vec4 FragColor;
 
 // Only diffuse textures are supported at present
 uniform sampler2D texture_diffuse1;
-//uniform vec3 lightPos;
 
 // Direction light
 uniform struct Light
@@ -53,5 +52,6 @@ void main()
 
 	// Combine Phong components
 	const vec3 result = (ambient + diffuse + specular) * vec3(texture(texture_diffuse1, TexCoords));
+
 	FragColor = vec4(result, 1.0);
 }
