@@ -335,3 +335,4 @@ ASALocalRun/
 
 # Repo specific rules
 !media/**
+Assets/**

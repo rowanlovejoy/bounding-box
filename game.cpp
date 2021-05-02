@@ -19,7 +19,7 @@ void Game::init()
 
 	// Create sky cube
 	const auto skyboxModel{Model{"media/skycube/skycube.obj"}};
-	GameObjects.emplace_back(std::make_unique<VisibleObject>(skyboxModel, Shaders[1], glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{20.0f}));
+	GameObjects.emplace_back(std::make_unique<VisibleObject>(skyboxModel, Shaders[1], glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{60.0f}));
 
 
 	// PLATFORMS START
