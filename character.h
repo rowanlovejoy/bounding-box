@@ -62,14 +62,15 @@ public:
 	{
 		return Grounded;
 	}
-	
+
 	void setGrounded(bool grounded)
 	{
 		Grounded = grounded;
 	}
 
-private:
+	virtual void tick(float deltaTime) override;
 
+private:
 	glm::vec3 Front;
 	glm::vec3 Forward;
 	glm::vec3 Up;
@@ -85,7 +86,7 @@ private:
 	float Radius;
 
 	bool Grounded;
-	
+
 	// Calculates the front vector from the camera's current Euler Angles
 	void updateDirectionVectors();
 };

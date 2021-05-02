@@ -22,7 +22,7 @@ void Mesh::draw(const Shader& shader, const glm::mat4& transform) const
 	unsigned int heightNr{1};
 
 	shader.use();
-	
+
 	// Set sampler in shader and bind texture for rendering
 	for (auto i{0}; i < Textures.size(); ++i)
 	{
@@ -41,10 +41,10 @@ void Mesh::draw(const Shader& shader, const glm::mat4& transform) const
 			number = std::to_string(heightNr++);
 
 		shader.setUniform(name + number, i);
-		
+
 		glBindTexture(GL_TEXTURE_2D, Textures[i].Id);
 	}
-	
+
 	shader.setUniform("model", transform);
 
 	// Render the mesh
@@ -65,7 +65,7 @@ void Mesh::setUpMesh()
 
 	// Bind VAO to store subsequent VBO and attribute pointer configuration
 	glBindVertexArray(VAO);
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// Since structs are sequential, a pointer to struct functions like a pointer to the first element of an array, meaning it can be passed to indicate the start of the data vertex
 	glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(Vertex), &Vertices[0], GL_STATIC_DRAW);
@@ -74,24 +74,24 @@ void Mesh::setUpMesh()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(unsigned int), &Indices[0], GL_STATIC_DRAW);
 
 	// Configure vertex attribute pointers
-	
+
 	constexpr auto stride{sizeof(Vertex)};
 	// Positions
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(0));
-	
+
 	// Normals
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(offsetof(Vertex, Normal)));
-	
+
 	// Texture coordinates
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(offsetof(Vertex, TexCoords)));
-	
+
 	// Vertex tangents
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(offsetof(Vertex, Tangent)));
-	
+
 	// Vertex bitangents
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(offsetof(Vertex, Bitangent)));

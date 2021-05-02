@@ -1,11 +1,14 @@
 #include "game.h"
 #include "model.h"
 #include "visibleobject.h"
+#include "platform.h"
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <tuple>
 
-Game::Game(int width, int height) : State{GameState::GAME_ACTIVE}, Keys{}, ScreenWidth{width}, ScreenHeight{height}, GameObjects{}, Shaders{}, PlayerCharacter{glm::vec3{1.0f, 1.5f, 1.0f}, glm::vec3{3.0f}, 0.85f} { }
+Game::Game(int width, int height) : State{GameState::GAME_ACTIVE}, Keys{}, ScreenWidth{width}, ScreenHeight{height}, GameObjects{}, Shaders{}, PlayerCharacter{glm::vec3{1.0f, 1.5f, 1.0f}, glm::vec3{3.0f}, 0.85f}
+{
+}
 
 // Initialise the game, including creating game objects and setting their initial positions, and setting other unchanging values
 void Game::init()
@@ -14,71 +17,58 @@ void Game::init()
 	Shaders.emplace_back(Shader{"shaders/shader.vert", "shaders/shader.frag"});
 	Shaders.emplace_back(Shader{"shaders/skybox.vert", "shaders/skybox.frag"});
 
-	// Initialise sky cube
-	const Model skyboxModel{"media/skycube/skycube.obj"};
-	GameObjects.emplace_back(new VisibleObject{glm::vec3{0.0f}, glm::vec3{0.0f}, skyboxModel, Shaders[1], glm::vec3{20.0f}});
-	
-	// Initialise level objects
-	const Model platformModel{"media/platform/platform.obj"};
+	// Create sky cube
+	const auto skyboxModel{Model{"media/skycube/skycube.obj"}};
+	GameObjects.emplace_back(std::make_unique<VisibleObject>(skyboxModel, Shaders[1], glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{0.0f}, glm::vec3{20.0f}));
+
+
+	// PLATFORMS START
+	const auto platformModel{Model{"media/platform/platform.obj"}};
 	constexpr auto platformSize{glm::vec3{2.0f, 1.0f, 2.0f}};
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{0.0f, 0.0f, 0.0f},
-		glm::vec3{4.0f, 1.0f, 4.0f},
-		platformModel,
-		Shaders[0],
-		glm::vec3{2.0f, 1.0f, 2.0f},
-		glm::vec3{1.0f, 0.0f, 1.0f}
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{0.0f, 0.0f, -5.5f},
-		platformSize,
-		platformModel,
-		Shaders[0]
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{0.0f, 1.5f, -10.0f},
-		platformSize,
-		platformModel,
-		Shaders[0]
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{6.5f, -1.0f, -10.0f},
-		platformSize,
-		platformModel,
-		Shaders[0]
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{12.5f, -5.0f, -5.0f},
-		platformSize,
-		platformModel,
-		Shaders[0]
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{17.5f, -4.0f, -5.0f},
-		platformSize,
-		platformModel,
-		Shaders[0]
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{17.5f, -2.5f, -9.0f},
-		platformSize,
-		platformModel,
-		Shaders[0]
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{22.0f, -1.0f, -8.5f},
-		platformSize,
-		platformModel,
-		Shaders[0]
-	});
-	GameObjects.emplace_back(new VisibleObject{
-		glm::vec3{30.0f, -4.5f, -8.5f},
-		glm::vec3{5.0f, 1.0f, 5.0f},
-		platformModel,
-		Shaders[0],
-		glm::vec3{3.0f, 1.0f, 3.0f},
-		glm::vec3{1.75f, 0.0f, 1.75f}
-	});
+
+	GameObjects.emplace_back
+	(
+		std::make_unique<Platform>
+		(
+			platformModel,
+			Shaders[0],
+			glm::vec3{0.0f},
+			glm::vec3{4.0f, 1.0f, 4.0f},
+			glm::vec3{0.0f},
+			glm::vec3{1.0f, 0.0f, 1.0f},
+			glm::vec3{2.0f, 1.0f, 2.0f}
+		)
+	);
+
+	GameObjects.emplace_back(std::make_unique<Platform>(platformModel, Shaders[0], glm::vec3{0.0f, 0.0f, -5.5f}, platformSize));
+	GameObjects.emplace_back(std::make_unique<Platform>(platformModel, Shaders[0], glm::vec3{0.0f, 1.5f, -10.0f}, platformSize));
+	GameObjects.emplace_back(std::make_unique<Platform>(platformModel, Shaders[0], glm::vec3{6.5f, -1.0f, -10.0f}, platformSize));
+	GameObjects.emplace_back(std::make_unique<Platform>(platformModel, Shaders[0], glm::vec3{12.5f, -5.0f, -5.0f}, platformSize));
+	GameObjects.emplace_back(std::make_unique<Platform>(platformModel, Shaders[0], glm::vec3{17.5f, -4.0f, -5.0f}, platformSize));
+	GameObjects.emplace_back(std::make_unique<Platform>(platformModel, Shaders[0], glm::vec3{17.5f, -2.5f, -9.0f}, platformSize));
+	GameObjects.emplace_back(std::make_unique<Platform>(platformModel, Shaders[0], glm::vec3{22.0f, -1.0f, -8.5f}, platformSize));
+
+	GameObjects.emplace_back
+	(
+		std::make_unique<Platform>
+		(
+			platformModel,
+			Shaders[0],
+			glm::vec3{30.0f, -4.5f, -8.5f},
+			glm::vec3{5.0f, 1.0f, 5.0f}, 
+			glm::vec3{0.0f},
+			glm::vec3{1.75f, 0.0f, 1.75f},
+			glm::vec3{3.0f, 1.0f, 3.0f}
+		)
+	);
+
+	// PLATFORMS END
+
+	// Initialise all game objects
+	for (auto& obj : GameObjects)
+	{
+		obj->init();
+	}
 
 	// Projection matrix doesn't change so can be initialised here
 	const auto projection{glm::perspective(glm::radians(PlayerCharacter.getFov()), static_cast<float>(ScreenWidth) / static_cast<float>(ScreenHeight), 0.1f, 1000.0f)};
@@ -108,12 +98,24 @@ void Game::processInput()
 }
 
 // Update the positions of GameObjects, apply forces, check collisions, and perform other relevant per-tick checks (e.g., game over)
-void Game::update()
+void Game::update(float deltaTime)
 {
-	// Consume inputted velocity and move the character
-	PlayerCharacter.move();
-	const auto view{PlayerCharacter.getViewMatrix()};
+	// Tick player character separately due to architectural constraints
+	PlayerCharacter.tick(deltaTime);
 
+	// Move any objects that have velocity
+	for (auto& obj : GameObjects)
+	{
+		obj->tick(deltaTime);
+	}
+
+	// After do object movement, check apply gravity and do collisions
+	applyGravity();
+	doCollisions();
+	checkGameOver();
+
+	// Set shader values
+	const auto view{PlayerCharacter.getViewMatrix()}; // View matrix based on the player's view
 	const auto lightPos{view * glm::vec4{-0.75, -0.5, -0.3, 0.0}}; // Light position in view space
 	constexpr auto lightColor{glm::vec3{1.0}}; // Light colour
 	for (const auto& shader : Shaders)
@@ -123,19 +125,6 @@ void Game::update()
 		shader.setUniform("light.position", lightPos);
 		shader.setUniform("light.color", lightColor);
 	}
-
-	// Vertically oscillate platforms
-	for (auto i{2}; i < GameObjects.size() - 1; ++i)
-		GameObjects[i]->addVelocity(glm::vec3{0.0f, static_cast<float>(sin(glfwGetTime())) * i * 0.0035f, 0.0f});
-
-	// Move any objects that have velocity
-	for (auto& obj : GameObjects)
-		obj->move();
-	
-	// After do object movement, check apply gravity and do collisions
-	applyGravity();
-	doCollisions();
-	checkGameOver();
 }
 
 // Render all GameObjects and get the latest view matrix (which defines the player's view) from player character
@@ -143,17 +132,21 @@ void Game::render()
 {
 	// Don't render anything without shaders
 	if (Shaders.empty())
+	{
 		return;
+	}
 
 	for (const auto& obj : GameObjects)
+	{
 		obj->draw();
+	}
 }
 
 // Check for and resolve collisions between the player character and game objects. Also set the grounded state of the player (used for jumping logic)
 void Game::doCollisions()
 {
 	static auto groundColCount{0};
-	
+
 	for (const auto& obj : GameObjects)
 	{
 		const auto playerPos{PlayerCharacter.getPosition()};
@@ -186,18 +179,16 @@ void Game::doCollisions()
 			else if (dir == Direction::Y_POS || dir == Direction::Y_NEG)
 			{
 				const auto penetration{playerRad - std::abs(diffVector.y)};
-				
+
 				if (dir == Direction::Y_POS)
 				{
 					const auto newY{playerPos.y - penetration};
 					PlayerCharacter.setPosition(glm::vec3{playerPos.x, newY, playerPos.z});
 				}
-
-				// Top surface of obstacle
-				if (dir == Direction::Y_NEG)
+				else if (dir == Direction::Y_NEG) // Top surface of obstacle
 				{
 					++groundColCount;
-					
+
 					const auto newY{playerPos.y + penetration};
 					PlayerCharacter.setPosition(glm::vec3{playerPos.x, newY, playerPos.z});
 				}
@@ -211,8 +202,7 @@ void Game::doCollisions()
 					const auto newZ{playerPos.z - penetration};
 					PlayerCharacter.setPosition(glm::vec3{playerPos.x, playerPos.y, newZ});
 				}
-
-				if (dir == Direction::Z_NEG)
+				else if (dir == Direction::Z_NEG)
 				{
 					const auto newZ{playerPos.z + penetration};
 					PlayerCharacter.setPosition(glm::vec3{playerPos.x, playerPos.y, newZ});
@@ -267,7 +257,7 @@ Direction Game::getVectorDirection(const glm::vec3& target)
 
 	for (auto i{0}; i < 6; ++i)
 	{
-		const auto dotProduct{glm::dot(glm::normalize(target), directions[i])};
+		const auto dotProduct{dot(normalize(target), directions[i])};
 
 		if (dotProduct > max)
 		{
@@ -295,7 +285,6 @@ void Game::setMouseInput(float xOffset, float yOffset)
 // Get input (scroll wheel X and Y offset) from a mouse scroll wheel
 void Game::setScrollInput(float xOffset, float yOffset)
 {
-
 }
 
 // Check for collision between AABB objects and a player character defined by a sphere
@@ -331,7 +320,7 @@ Collision Game::checkCollision(const Character& camera, const GameObject& object
 
 	// Find difference between both centres
 	const auto difference{cameraCentre - aabbCentre};
-	const auto clampedDiff{glm::clamp(difference, -aabbHalfExtents, aabbHalfExtents)};
+	const auto clampedDiff{clamp(difference, -aabbHalfExtents, aabbHalfExtents)};
 
 	// Find position closest to camera (the circle)
 	const auto closestPoint{aabbCentre + clampedDiff};

@@ -8,15 +8,19 @@ class GameObject
 {
 public:
 	virtual ~GameObject() = default;
-	GameObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3& velocity = glm::vec3{0.0});
-	
+	GameObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3& velocity = glm::vec3{0.0f});
+
 	virtual void draw() const;
 	virtual void move();
-	
+	virtual void init();
+	virtual void tick(float deltaTime);
+
 	void setPosition(const glm::vec3& newPos);
 	const glm::vec3& getPosition() const;
+
+	void setSize(const glm::vec3& size);
 	const glm::vec3& getSize() const;
-	
+
 	void addVelocity(const glm::vec3& direction);
 	const glm::vec3& getVelocity() const;
 

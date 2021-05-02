@@ -19,20 +19,20 @@ void Model::draw(const Shader& shader, const glm::mat4& trans) const
 void Model::loadSceneFromFile(const std::string& path)
 {
 	Assimp::Importer importer{};
-	
+
 	const auto scene{importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace)};
-	
+
 	// Check for errors in the loaded scene
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << "\n";
-		
+
 		return;
 	}
 
 	// Cache the directory of the loaded file
 	Directory = path.substr(0, path.find_last_of('/'));
-	
+
 	getMeshesInNode(scene->mRootNode, scene);
 }
 
@@ -109,18 +109,18 @@ Mesh Model::storeMeshData(const aiMesh* mesh, const aiScene* scene)
 
 		vertices.push_back(vertex);
 	}
-	
+
 	// Get the indices needed for indexed drawing of each face in the mesh
 	for (auto i{0}; i < mesh->mNumFaces; ++i)
 	{
 		// Indices are stored per face
 		const auto face{mesh->mFaces[i]};
-		
+
 		// Retrieve all indices of the current face
 		for (auto j{0}; j < face.mNumIndices; ++j)
 			indices.push_back(face.mIndices[j]);
 	}
-	
+
 	// Get mesh's material data
 	const auto material{scene->mMaterials[mesh->mMaterialIndex]};
 
@@ -156,7 +156,7 @@ std::vector<Texture> Model::storeMaterialTextures(const aiMaterial* mat, aiTextu
 	{
 		aiString str{};
 		mat->GetTexture(type, i, &str);
-		
+
 		// Skip creating objects for textures that have already been loaded and cached
 		bool skip{false};
 		for (auto j{0}; j < TexturesLoaded.size(); ++j)
@@ -165,9 +165,9 @@ std::vector<Texture> Model::storeMaterialTextures(const aiMaterial* mat, aiTextu
 			if (std::strcmp(TexturesLoaded[j].Path.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(TexturesLoaded[j]);
-				
+
 				skip = true;
-				
+
 				break;
 			}
 		}
@@ -180,9 +180,9 @@ std::vector<Texture> Model::storeMaterialTextures(const aiMaterial* mat, aiTextu
 			texture.Type = typeName;
 			texture.Path = str.C_Str();
 			textures.push_back(texture);
-			
+
 			// Store it as texture loaded for entire model, to prevent unnecessarily loading duplicate textures.
-			TexturesLoaded.push_back(texture);  
+			TexturesLoaded.push_back(texture);
 		}
 	}
 
@@ -194,9 +194,9 @@ std::vector<Texture> Model::storeMaterialTextures(const aiMaterial* mat, aiTextu
 unsigned int Model::loadTextureFromFile(const std::string& path, const std::string& directory, bool gamma)
 {
 	const auto filename{directory + "/" + path};
-	
+
 	unsigned int textureId{};
-	
+
 	int width{};
 	int height{};
 	int numComponents{};
@@ -224,7 +224,7 @@ unsigned int Model::loadTextureFromFile(const std::string& path, const std::stri
 		// Generate texture and configure texture
 		glGenTextures(1, &textureId);
 		glBindTexture(GL_TEXTURE_2D, textureId);
-		
+
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, texData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 

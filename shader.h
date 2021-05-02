@@ -32,7 +32,7 @@ public:
 	void setUniform(const std::string& name, const glm::mat4& value) const;
 
 	// Get the id of the shader program
-	inline unsigned int getId() const
+	unsigned int getId() const
 	{
 		return Id;
 	}

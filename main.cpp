@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "stb_image.h"
 #include <iostream>
+#include <random>
 
 // Constants defining viewport horizontal and vertical resolution
 constexpr auto SCREEN_WIDTH{1280};
@@ -45,10 +46,10 @@ int main()
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 	{
 		std::cout << "Failed to initialize GLAD\n";
-		
+
 		return -1;
-	} 
-	
+	}
+
 	// Viewport
 	stbi_set_flip_vertically_on_load(true);
 
@@ -67,26 +68,26 @@ int main()
 	auto timer{lastTime};
 	double deltaTime{0};
 	double nowTime{0};
-	
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Calculate delta time
 		nowTime = glfwGetTime();
-		deltaTime += (nowTime - lastTime) / fpsLimit; 
+		deltaTime += (nowTime - lastTime) / fpsLimit;
 		lastTime = nowTime;
-		
+
 		// Every sixty iterations delta time will be greater than or equal to one, so updates occur every sixty iterations
 		while (deltaTime >= 1.0)
 		{
 			// Process input and update game state at a fixed rate
 			glfwPollEvents();
 			gameInstance.processInput();
-			gameInstance.update();
+			gameInstance.update(deltaTime);
 
 			++updates;
 			--deltaTime;
 		}
-		
+
 		// Don't limit render rate
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

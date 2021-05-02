@@ -61,7 +61,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath, c
 	glShaderSource(vertex, 1, &vShaderCode, nullptr);
 	glCompileShader(vertex);
 	checkShaderErrors(vertex, "VERTEX");
-	
+
 	const auto fragment{glCreateShader(GL_FRAGMENT_SHADER)};
 	glShaderSource(fragment, 1, &fShaderCode, nullptr);
 	glCompileShader(fragment);
@@ -172,7 +172,7 @@ void Shader::checkShaderErrors(const GLuint& shader, const std::string& type)
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, logLength, nullptr, infoLog);
-			
+
 			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n\n";
 		}
 	}
