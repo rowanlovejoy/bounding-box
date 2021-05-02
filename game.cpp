@@ -82,20 +82,11 @@ void Game::init()
 
 	// Projection matrix doesn't change so can be initialised here
 	const auto projection{glm::perspective(glm::radians(PlayerCharacter.getFov()), static_cast<float>(ScreenWidth) / static_cast<float>(ScreenHeight), 0.1f, 1000.0f)};
-	Shaders[0].use();
-	Shaders[0].setUniform("projection", projection);
-	Shaders[1].use();
-	Shaders[1].setUniform("projection", projection);
-
-	// Set directional light direction
-	constexpr auto lightPos{glm::vec4{-0.75, -0.5, -0.3, 0.0}};
-	Shaders[0].use();
-	Shaders[0].setUniform("light.position", lightPos);
-
-	// Set directional light color
-	constexpr auto lightColor{glm::vec3{1.0}};
-	Shaders[0].use();
-	Shaders[0].setUniform("light.color", lightColor); 
+	for (const auto& shader : Shaders)
+	{
+		shader.use();
+		shader.setUniform("projection", projection);
+	}
 }
 
 // Handle received keyboard input by triggering functionality in controllable GameObjects
@@ -121,9 +112,18 @@ void Game::update()
 {
 	// Consume inputted velocity and move the character
 	PlayerCharacter.move();
-	Shaders[0].use();
-	Shaders[0].setUniform("viewPos", PlayerCharacter.getPosition());
-	
+	const auto view{PlayerCharacter.getViewMatrix()};
+
+	const auto lightPos{view * glm::vec4{-0.75, -0.5, -0.3, 0.0}}; // Light position in view space
+	constexpr auto lightColor{glm::vec3{1.0}}; // Light colour
+	for (const auto& shader : Shaders)
+	{
+		shader.use();
+		shader.setUniform("view", view);
+		shader.setUniform("light.position", lightPos);
+		shader.setUniform("light.color", lightColor);
+	}
+
 	// Vertically oscillate platforms
 	for (auto i{2}; i < GameObjects.size() - 1; ++i)
 		GameObjects[i]->addVelocity(glm::vec3{0.0f, static_cast<float>(sin(glfwGetTime())) * i * 0.0035f, 0.0f});
@@ -144,12 +144,6 @@ void Game::render()
 	// Don't render anything without shaders
 	if (Shaders.empty())
 		return;
-
-	const auto view{PlayerCharacter.getViewMatrix()};
-	Shaders[0].use();
-	Shaders[0].setUniform("view", view);
-	Shaders[1].use();
-	Shaders[1].setUniform("view", view);
 
 	for (const auto& obj : GameObjects)
 		obj->draw();

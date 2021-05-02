@@ -46,10 +46,6 @@ void Mesh::draw(const Shader& shader, const glm::mat4& transform) const
 	}
 	
 	shader.setUniform("model", transform);
-	
-	// Generate and set model matrix
-	const auto normalMatrix{glm::mat3{glm::transpose(glm::inverse(transform))}};
-	shader.setUniform("normalMat", normalMatrix);
 
 	// Render the mesh
 	glBindVertexArray(VAO);
