@@ -8,7 +8,7 @@ class GameObject
 {
 public:
 	virtual ~GameObject() = default;
-	GameObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3& velocity = glm::vec3{0.0f});
+	GameObject(const glm::vec3& position, const glm::vec3& size);
 
 	virtual void draw() const;
 	virtual void move();

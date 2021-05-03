@@ -3,10 +3,9 @@
 GameObject::GameObject
 (
 	const glm::vec3& position,
-	const glm::vec3& size,
-	const glm::vec3& velocity
+	const glm::vec3& size
 )
-	: position_{position}, size_{size}, velocity_{velocity}
+	: position_{position}, size_{size}
 {
 }
 

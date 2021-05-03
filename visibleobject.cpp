@@ -9,11 +9,10 @@ VisibleObject::VisibleObject
 	Shader shader,
 	const glm::vec3& position,
 	const glm::vec3& size,
-	const glm::vec3& velocity,
 	const glm::vec3& offset,
 	const glm::vec3& scale
 )
-	: GameObject{position, size, velocity},
+	: GameObject{position, size},
 	model_{std::move(model)},
 	scale_{scale},
 	offset_{offset},
